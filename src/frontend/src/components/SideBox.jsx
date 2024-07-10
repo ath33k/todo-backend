@@ -1,71 +1,25 @@
-import { Button, Divider, IconButton } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import TodayIcon from "@mui/icons-material/Today";
-import AddIcon from "@mui/icons-material/Add";
+import { Divider } from "@mui/material";
+import React, { useEffect, useState } from "react";
+
+import SideBoxCategory from "./SideBoxCategory";
+import SideBoxList from "./SideBoxList";
 
 const SideBox = () => {
-  const [isOverflow, setIsOverflow] = useState(false);
-  const sideElement = useRef();
+  const [selectedTab, setSelectedTab] = useState("");
 
   useEffect(() => {
-    const checkOverflow = () => {
-      if (sideElement.current.scrollHeight > sideElement.current.clientHeight) {
-        setIsOverflow(true);
-      } else {
-        setIsOverflow(false);
-      }
-    };
-    checkOverflow();
-  }, []);
+    if (!selectedTab) {
+      setSelectedTab("today");
+    }
+  }, [selectedTab]);
   return (
-    <div className="flex flex-col h-full gap-2 pt-4 bg-stone-200">
-      <div className="h-full overflow-y-scroll" ref={sideElement}>
-        <div className="flex gap-2 items-center hover:bg-neutral-300 p-2 cursor-pointer">
-          <span>
-            <TodayIcon sx={{ width: "24px", height: "24px" }} />
-          </span>
-
-          <span>Today</span>
-        </div>
-        <div className="flex gap-2 items-center hover:bg-neutral-300 p-2 cursor-pointer">
-          <span>
-            <TodayIcon sx={{ width: "24px", height: "24px" }} />
-          </span>
-
-          <span>Upcoming</span>
-        </div>
-        <div className="flex gap-2 items-center hover:bg-neutral-300 p-2 cursor-pointer">
-          <span>
-            <TodayIcon sx={{ width: "24px", height: "24px" }} />
-          </span>
-
-          <span>All</span>
-        </div>
-
-        <Divider />
-
-        <div className="p-2 font-semibold border-2">Lists</div>
-        <div
-          className={`flex items-center gap-2 px-2 p-1  hover:bg-neutral-300 text-blue-600 cursor-pointer ${
-            isOverflow ? "hidden" : ""
-          }`}
-        >
-          <span>
-            <AddIcon />
-          </span>
-          <span>New List</span>
-        </div>
-      </div>
-      <div
-        className={`flex items-center gap-2 p-2 hover:bg-neutral-300 text-blue-600 cursor-pointer ${
-          isOverflow ? "" : "hidden"
-        }`}
-      >
-        <span>
-          <AddIcon />
-        </span>
-        <span>New List</span>
-      </div>
+    <div className="flex flex-col h-full gap-1 pt-4 bg-stone-200 overflow-hidden">
+      <SideBoxCategory
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+      />
+      <Divider />
+      <SideBoxList />
     </div>
   );
 };
