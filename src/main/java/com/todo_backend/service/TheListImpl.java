@@ -1,8 +1,8 @@
 package com.todo_backend.service;
 
-import com.todo_backend.dao.TaskRepository;
 import com.todo_backend.dao.TheListRepository;
 import com.todo_backend.entity.TheList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +13,7 @@ public class TheListImpl implements TheListService{
 
     private TheListRepository listRepository;
 
+    @Autowired
     public TheListImpl(TheListRepository listRepository) {
         this.listRepository = listRepository;
     }
@@ -28,13 +29,11 @@ public class TheListImpl implements TheListService{
 
         TheList list = null;
 
-
         if (result.isPresent()){
             list = result.get();
         }else{
-            throw new RuntimeException("Did bot find list id - " + theId);
+            throw new RuntimeException("Did not find list id - " + theId);
         }
-        System.out.println(list);
         return list;
     }
 

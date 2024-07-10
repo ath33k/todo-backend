@@ -1,6 +1,5 @@
 package com.todo_backend.service;
 
-import com.todo_backend.entity.Task;
 import com.todo_backend.entity.TheList;
 
 import java.util.List;

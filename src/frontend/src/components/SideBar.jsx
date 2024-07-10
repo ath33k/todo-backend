@@ -12,11 +12,11 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import SideBox from "./SideBox";
 
-const SideBar = ({ open, setOpen, children }) => {
+const SideBar = ({ open, setOpen, selectedTab, setSelectedTab, children }) => {
   return (
     <Drawer open={open} onClose={() => setOpen(false)}>
       <Box sx={{ width: 250, height: "100%" }}>
-        <SideBox />
+        <SideBox selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       </Box>
     </Drawer>
   );

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "list")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TheList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +20,9 @@ public class TheList {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "tasks")
-    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonManagedReference
+    @OneToMany(mappedBy = "list",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("dateTime asc, isCompleted asc")
     private List<Task> tasks;
 
     public TheList() {
@@ -60,8 +60,10 @@ public class TheList {
         if (tasks == null){
             tasks = new ArrayList<>();
         }
+
         tasks.add(tempTask);
-        tempTask.setList(this);
+
+
     }
 
     @Override

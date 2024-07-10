@@ -4,14 +4,12 @@ import React, { useEffect, useState } from "react";
 import SideBoxCategory from "./SideBoxCategory";
 import SideBoxList from "./SideBoxList";
 
-const SideBox = () => {
-  const [selectedTab, setSelectedTab] = useState("");
-
+const SideBox = ({ selectedTab, setSelectedTab }) => {
   useEffect(() => {
     if (!selectedTab) {
       setSelectedTab("today");
     }
-  }, [selectedTab]);
+  }, [selectedTab, setSelectedTab]);
   return (
     <div className="flex flex-col h-full gap-1 pt-4 bg-stone-200 overflow-hidden">
       <SideBoxCategory
@@ -19,7 +17,7 @@ const SideBox = () => {
         setSelectedTab={setSelectedTab}
       />
       <Divider />
-      <SideBoxList />
+      <SideBoxList selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
     </div>
   );
 };

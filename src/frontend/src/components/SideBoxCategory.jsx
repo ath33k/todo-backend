@@ -3,9 +3,25 @@ import TodayIcon from "@mui/icons-material/Today";
 import AddIcon from "@mui/icons-material/Add";
 import UpcomingIcon from "@mui/icons-material/Upcoming";
 import ListIcon from "@mui/icons-material/List";
+import axios from "axios";
+import { useTasksData } from "../context/TasksProvider";
 
 const SideBoxCategory = ({ selectedTab, setSelectedTab }) => {
-  const handleSelection = (val) => {
+  const { data, setData } = useTasksData();
+
+  const fetchAllTasks = async () => {
+    try {
+      const response = await axios.get("/api/tasks");
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSelection = async (val) => {
+    const result = await fetchAllTasks();
+    setData(result);
+
     setSelectedTab(val);
   };
   return (

@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "task")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,17 +19,16 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", shape = JsonFormat.Shape.STRING)
     @Column(name = "date_time")
     private LocalDateTime dateTime;
 
     @Column(name = "is_completed")
     private boolean isCompleted;
 
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,
-            CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "list_id")
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
+    @JoinColumn(name = "list_id")
     private TheList list;
 
     public Task() {
@@ -74,7 +73,7 @@ public class Task {
         this.dateTime = dateTime;
     }
 
-    public boolean isCompleted() {
+    public boolean getIsCompleted() {
         return isCompleted;
     }
 
@@ -96,9 +95,8 @@ public class Task {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", DateTime=" + dateTime +
+                ", dateTime=" + dateTime +
                 ", isCompleted=" + isCompleted +
-                ", list=" + list +
                 '}';
     }
 }

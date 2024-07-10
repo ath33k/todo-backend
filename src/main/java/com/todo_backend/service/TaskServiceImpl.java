@@ -5,12 +5,15 @@ import com.todo_backend.dao.TheListRepository;
 import com.todo_backend.entity.Task;
 import com.todo_backend.entity.TheList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class TaskServiceImpl implements TaskService{
     private TaskRepository taskRepository;
     private TheListRepository theListRepository;
@@ -23,7 +26,18 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public List<Task> findAll() {
-        return taskRepository.findAll();
+        Sort sort = Sort.by("isCompleted").ascending();
+        return taskRepository.findAll(sort);
+    }
+
+    @Override
+    public List<Task> findTodayTasks() {
+        return taskRepository.selectTodayTasks();
+    }
+
+    @Override
+    public List<Task> findUpcomingTasks() {
+        return taskRepository.selectUpcomingTasks();
     }
 
     @Override
@@ -41,8 +55,18 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public Task update(int theId) {
-        return null;
+    public Task update(int theId, Task task) {
+        Optional<Task> result = taskRepository.findById(theId);
+        Task theTask = null;
+
+        if (result.isPresent()){
+            theTask = result.get();
+        }else{
+            throw new RuntimeException("Did not find task id - " + theId);
+        }
+        theTask.setCompleted(task.getIsCompleted());
+
+        return taskRepository.save(theTask);
     }
 
     @Override

@@ -2,11 +2,28 @@ import React, { useEffect, useRef, useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Modal, Typography } from "@mui/material";
+import axios from "axios";
+import TheList from "./TheList";
+import CreateList from "./CreateList";
 
-const SideBoxList = () => {
+const SideBoxList = ({ selectedTab, setSelectedTab }) => {
   const [isOverflow, setIsOverflow] = useState(false);
   const sideElement = useRef();
   const [modelOpen, setModelOpen] = useState(false);
+  const [lists, setLists] = useState([]);
+  useEffect(() => {
+    const fetchLists = async () => {
+      try {
+        const response = await axios.get("/api/lists");
+        const result = response.data;
+        setLists(result);
+        console.log(result);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchLists();
+  }, []);
 
   useEffect(() => {
     const checkOverflow = () => {
@@ -18,14 +35,30 @@ const SideBoxList = () => {
     };
     checkOverflow();
   }, []);
+
   return (
     <div className="flex flex-col overflow-hidden justify-between h-full">
-      {modelOpen && <CreateList open={modelOpen} setOpen={setModelOpen} />}
+      {modelOpen && (
+        <CreateList
+          open={modelOpen}
+          setOpen={setModelOpen}
+          setLists={setLists}
+        />
+      )}
       <div className="p-2 font-semibold border-2">Lists</div>
       <div className="h-full overflow-y-scroll " ref={sideElement}>
-        <div>Lorem ipsum dolor sit amet.</div>
-        <div>Lorem ipsum dolor sit amet.</div>
-        <div>Lorem ipsum dolor sit amet.</div>
+        {lists ? (
+          lists.map((el) => (
+            <TheList
+              key={el.id}
+              list={el}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+            />
+          ))
+        ) : (
+          <div>loading...</div>
+        )}
 
         <div
           className={`flex items-center gap-2 px-2 p-1  hover:bg-neutral-300 text-blue-600 cursor-pointer ${
@@ -55,36 +88,3 @@ const SideBoxList = () => {
 };
 
 export default SideBoxList;
-
-function CreateList({ open, setOpen }) {
-  const handleClose = () => setOpen(false);
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-  return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Text in a modal
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-      </Box>
-    </Modal>
-  );
-}

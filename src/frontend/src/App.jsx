@@ -4,11 +4,16 @@ import { useState } from "react";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage";
+import { TasksProvider } from "./context/TasksProvider";
 
 const routers = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <TasksProvider>
+        <HomePage />
+      </TasksProvider>
+    ),
   },
 ]);
 
