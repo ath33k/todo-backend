@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  mysqldb:
+    image: "mysql"
+    restart: "always"
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=todo
+    ports:
+      - "3306:3306"
+    networks:
+      - sql
+
+  todo-backend:
+    depends_on:
+      - mysqldb
+    restart: "on-failure"
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - sql
+
+networks:
+  sql:
+
+
+#    environment:
+#      - SPRING_DATASOURCE_URL= jdbc:mysql://mysql:3306/todo
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=my-secret-pw

@@ -9,9 +9,9 @@ import { useTasksData } from "../context/TasksProvider";
 const SideBoxCategory = ({ selectedTab, setSelectedTab }) => {
   const { data, setData } = useTasksData();
 
-  const fetchAllTasks = async () => {
+  const fetchAllTasks = async (val) => {
     try {
-      const response = await axios.get("/api/tasks");
+      const response = await axios.get(`/api/tasks?type=${val}`);
       return response.data;
     } catch (err) {
       console.log(err);
@@ -19,9 +19,8 @@ const SideBoxCategory = ({ selectedTab, setSelectedTab }) => {
   };
 
   const handleSelection = async (val) => {
-    const result = await fetchAllTasks();
+    const result = await fetchAllTasks(val);
     setData(result);
-
     setSelectedTab(val);
   };
   return (
