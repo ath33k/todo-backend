@@ -1,5 +1,6 @@
 package com.todo_backend.controller;
 import com.todo_backend.entity.TheList;
+import com.todo_backend.exception.CustomException;
 import com.todo_backend.service.TheListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class TheListController {
     }
 
     @GetMapping("/{listId}")
-    public TheList getList(@PathVariable int listId){
+    public TheList getList(@PathVariable int listId) throws CustomException {
         return listService.findById(listId);
     }
 

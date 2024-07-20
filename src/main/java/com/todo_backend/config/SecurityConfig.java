@@ -31,11 +31,13 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth ->{
-                auth.requestMatchers("/app/assets/*","/app/signin","/app/signup","/api/auth/**").permitAll()
+                auth.requestMatchers("/","/app/assets/*","/app/signin","/app/signup","/api/auth/**").permitAll()
                     .anyRequest().authenticated();
             })
+
             .formLogin(login-> {
                 login.loginPage("/app/signin");
+
             })
             .sessionManagement(session -> {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

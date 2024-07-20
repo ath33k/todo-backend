@@ -4,8 +4,10 @@ import com.todo_backend.dao.TaskRepository;
 import com.todo_backend.dao.TheListRepository;
 import com.todo_backend.entity.Task;
 import com.todo_backend.entity.TheList;
+import com.todo_backend.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +43,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public Task findById(int theId) {
+    public Task findById(int theId) throws CustomException {
         Optional<Task> result = taskRepository.findById(theId);
 
         Task task = null;
@@ -49,20 +51,20 @@ public class TaskServiceImpl implements TaskService{
         if (result.isPresent()){
             task = result.get();
         }else{
-            throw new RuntimeException("Did not find task id - " + theId);
+            throw new CustomException("The task you looking for hasn't found", HttpStatus.NOT_FOUND);
         }
         return task;
     }
 
     @Override
-    public Task update(int theId, Task task) {
+    public Task update(int theId, Task task) throws CustomException {
         Optional<Task> result = taskRepository.findById(theId);
         Task theTask = null;
 
         if (result.isPresent()){
             theTask = result.get();
         }else{
-            throw new RuntimeException("Did not find task id - " + theId);
+            throw new CustomException("The task you looking for hasn't found", HttpStatus.NOT_FOUND);
         }
         theTask.setCompleted(task.getIsCompleted());
 

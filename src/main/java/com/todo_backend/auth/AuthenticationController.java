@@ -1,5 +1,6 @@
 package com.todo_backend.auth;
 
+import com.todo_backend.entity.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,4 +75,14 @@ public class AuthenticationController {
         response.sendRedirect("/authenticate");
     }
 
+
+    @GetMapping("/currentUser")
+    public AuthUserResponse checkLoggedInUser(Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+        return AuthUserResponse.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .username(user.getUsername())
+                .build();
+    }
 }

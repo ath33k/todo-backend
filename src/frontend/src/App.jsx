@@ -7,6 +7,8 @@ import HomePage from "./pages/HomePage";
 import { TasksProvider } from "./context/TasksProvider";
 import LoginPage from "./pages/LoginPage";
 import Signup from "./pages/Signup";
+import PageNotFound from "./pages/PageNotFound";
+import { Authprovider } from "./context/AuthProvider";
 
 const routers = createBrowserRouter(
   [
@@ -25,6 +27,10 @@ const routers = createBrowserRouter(
           <HomePage />
         </TasksProvider>
       ),
+    },
+    {
+      path: "*",
+      element: <PageNotFound />,
     },
   ],
   { basename: "/app" }

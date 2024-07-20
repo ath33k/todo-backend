@@ -3,9 +3,11 @@ package com.todo_backend.controller;
 
 import com.todo_backend.entity.Task;
 import com.todo_backend.entity.TheList;
+import com.todo_backend.exception.CustomException;
 import com.todo_backend.service.TaskService;
 import com.todo_backend.service.TheListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +35,7 @@ public class TaskController {
         }
     }
     @PostMapping("/{listId}")
-    private Task createTask(@PathVariable int listId, @RequestBody Task task){
+    private Task createTask(@PathVariable int listId, @RequestBody Task task) throws CustomException {
         System.out.println(task.toString());
         TheList list = listService.findById(listId);
 //        list.addTask(task);
@@ -43,7 +45,7 @@ public class TaskController {
     }
 
     @PutMapping("/{taskId}")
-    public Task updateTask(@PathVariable int taskId, @RequestBody Task task){
+    public Task updateTask(@PathVariable int taskId, @RequestBody Task task) throws CustomException {
         return taskService.update(taskId, task);
     }
 

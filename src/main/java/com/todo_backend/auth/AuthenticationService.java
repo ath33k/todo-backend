@@ -4,8 +4,10 @@ import com.todo_backend.config.JWTService;
 import com.todo_backend.dao.UserRepository;
 import com.todo_backend.entity.User;
 import com.todo_backend.entity.UserRole;
+import com.todo_backend.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,15 +38,14 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        System.out.println("beforemanager");
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                                         request.getEmail(),
                                         request.getPassword()
                                 ));
-        System.out.println("aftermanager");
+
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
-        System.out.println(user);
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()

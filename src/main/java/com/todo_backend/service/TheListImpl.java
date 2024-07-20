@@ -2,7 +2,9 @@ package com.todo_backend.service;
 
 import com.todo_backend.dao.TheListRepository;
 import com.todo_backend.entity.TheList;
+import com.todo_backend.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class TheListImpl implements TheListService{
     }
 
     @Override
-    public TheList findById(int theId) {
+    public TheList findById(int theId) throws CustomException {
         Optional<TheList> result = listRepository.findById(theId);
 
         TheList list = null;
@@ -32,7 +34,7 @@ public class TheListImpl implements TheListService{
         if (result.isPresent()){
             list = result.get();
         }else{
-            throw new RuntimeException("Did not find list id - " + theId);
+            throw new CustomException("The list you looking for hasn't found", HttpStatus.NOT_FOUND);
         }
         return list;
     }
