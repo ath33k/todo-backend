@@ -2,6 +2,7 @@ package com.todo_backend.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
     private final UserDetailsService userDetailsService;
 
-
+    // this filter goes through all the request from client
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -30,16 +31,31 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
+        String jwt = null;
         final String userEmail;
 
-        if(authHeader == null || !authHeader.startsWith("Bearer")){
+        if ((request.getCookies() == null)){
+            filterChain.doFilter(request,response);
+            return;
+        }
+        for (Cookie cookie: request.getCookies()){
+            if (cookie.getName().equals("accessToken")){
+                jwt = cookie.getValue();
+                break;
+            }
+        }
+        if (jwt == null){
             filterChain.doFilter(request,response);
             return;
         }
 
+//        if(authHeader == null || !authHeader.startsWith("Bearer")){
+//            filterChain.doFilter(request,response);
+//            return;
+//        }
+
         //'Bearer ' letter ending at num 7
-        jwt = authHeader.substring(7);
+//        jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
         // if we have username and user not authenticated
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
@@ -53,6 +69,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
+
                 // extend authentication token with details of the  request
                 authenticationToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)

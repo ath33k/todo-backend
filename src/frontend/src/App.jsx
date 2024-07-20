@@ -5,22 +5,30 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import { TasksProvider } from "./context/TasksProvider";
-import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import Signup from "./pages/Signup";
 
-const routers = createBrowserRouter([
-  {
-    path: "/login-page",
-    element: <LandingPage />,
-  },
-  {
-    path: "/home",
-    element: (
-      <TasksProvider>
-        <HomePage />
-      </TasksProvider>
-    ),
-  },
-]);
+const routers = createBrowserRouter(
+  [
+    {
+      path: "/signin",
+      element: <LoginPage />,
+    },
+    {
+      path: "/signup",
+      element: <Signup />,
+    },
+    {
+      path: "/",
+      element: (
+        <TasksProvider>
+          <HomePage />
+        </TasksProvider>
+      ),
+    },
+  ],
+  { basename: "/app" }
+);
 
 function App() {
   return <RouterProvider router={routers} />;

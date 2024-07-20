@@ -16,7 +16,7 @@ import static java.util.Objects.nonNull;
 public class ResourceConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        this.serveDirectory(registry,"/","classpath:/static/");
+        this.serveDirectory(registry,"/app","classpath:/app/");
     }
 
     private void serveDirectory(ResourceHandlerRegistry registry, String endpoint, String location) {
