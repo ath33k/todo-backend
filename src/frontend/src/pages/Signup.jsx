@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Backdrop, Button, CircularProgress, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { Link, redirect } from "react-router-dom";
@@ -9,11 +9,12 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [isLoading, setIsLoading] = useStatef(false);
   const passwordRef = useRef();
 
   const handleSubmission = async (e) => {
     e.preventDefault();
-    location.assign("/");
+    setIsLoading(true);
     if (password != passwordConfirm) {
       passwordRef.current.focus();
       return;
@@ -25,12 +26,21 @@ const Signup = () => {
         email,
         password: passwordConfirm,
       });
+      setIsLoading(false);
+      location.assign("/");
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
   return (
     <div className="flex justify-center items-center bg-white h-svh p-4">
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <div className="flex flex-col w-full md:w-[50%]">
         <div className="pb-4">
           <h1>Create an account</h1>

@@ -25,9 +25,7 @@ const LandingPage = () => {
       });
 
       setIsLoading(false);
-      setTimeout(() => {
-        location.assign("/");
-      }, 1000);
+      location.assign("/");
     } catch (err) {
       console.log(err);
       setIsLoading(false);

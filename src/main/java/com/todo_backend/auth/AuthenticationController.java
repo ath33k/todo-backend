@@ -1,6 +1,7 @@
 package com.todo_backend.auth;
 
 import com.todo_backend.entity.User;
+import com.todo_backend.exception.CustomException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -78,6 +80,9 @@ public class AuthenticationController {
 
     @GetMapping("/currentUser")
     public AuthUserResponse checkLoggedInUser(Authentication authentication){
+        if (authentication== null){
+            throw new CustomException("User not logged in", HttpStatus.UNAUTHORIZED);
+        }
         User user = (User) authentication.getPrincipal();
         return AuthUserResponse.builder()
                 .firstName(user.getFirstName())

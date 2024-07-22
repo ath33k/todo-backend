@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "list")
+@Table(name = "list", uniqueConstraints = {
+        @UniqueConstraint(name = "list_nam_unique", columnNames = "name")
+})
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class TheList {
     @Id
@@ -24,6 +26,20 @@ public class TheList {
     @OneToMany(mappedBy = "list",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("dateTime asc, isCompleted asc")
     private List<Task> tasks;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public TheList() {
     }
@@ -56,15 +72,12 @@ public class TheList {
         this.tasks = tasks;
     }
 
-    public void addTask(Task tempTask){
-        if (tasks == null){
-            tasks = new ArrayList<>();
-        }
-
-        tasks.add(tempTask);
-
-
-    }
+//    public void addTask(Task tempTask){
+//        if (tasks == null){
+//            tasks = new ArrayList<>();
+//        }
+//        tasks.add(tempTask);
+//    }
 
     @Override
     public String toString() {
