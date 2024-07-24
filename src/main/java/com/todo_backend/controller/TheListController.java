@@ -61,6 +61,11 @@ public class TheListController {
         return listService.findById(listId);
     }
 
+    @PutMapping("/{listId}")
+    public TheList updateList(@PathVariable int listId, @RequestBody TheList theList){
+        return listService.update(listId, theList);
+    }
+
     @DeleteMapping("/{listId}")
     public void deleteList(@PathVariable int listId){
         listService.deleteById(listId);

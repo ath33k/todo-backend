@@ -117,7 +117,7 @@ function DeleteDialog({ open, setOpen, handleDeletion }) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{"Are You sure?"}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{"Are You sure ?"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           Are you sure You want to delete this task ?

@@ -5,8 +5,12 @@ const DataContext = createContext();
 const TasksProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [listId, setListId] = useState();
+  const [isLoading, setIsLoading] = useState();
+
   return (
-    <DataContext.Provider value={{ data, setData, listId, setListId }}>
+    <DataContext.Provider
+      value={{ data, setData, listId, setListId, isLoading, setIsLoading }}
+    >
       {children}
     </DataContext.Provider>
   );

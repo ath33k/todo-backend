@@ -18,6 +18,7 @@ const CreateList = ({ open, setOpen, setLists }) => {
       handleClose();
     } catch (err) {
       console.log(err);
+      handleClose();
     }
   };
   const style = {

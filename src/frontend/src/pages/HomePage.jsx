@@ -35,7 +35,7 @@ const HomePage = () => {
         <div className="side-box">
           <SideBox selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
         </div>
-        <div className="main-box">
+        <div className="main-box overflow-hidden">
           <MainBox selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
         </div>
       </div>

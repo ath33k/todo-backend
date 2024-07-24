@@ -7,7 +7,6 @@ const Default = ({ children }) => {
     <>
       <Header />
       {children}
-      <Footer />
     </>
   );
 };

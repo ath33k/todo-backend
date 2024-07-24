@@ -3,11 +3,13 @@ package com.todo_backend.controller;
 
 import com.todo_backend.entity.Task;
 import com.todo_backend.entity.TheList;
+import com.todo_backend.entity.User;
 import com.todo_backend.exception.CustomException;
 import com.todo_backend.service.TaskService;
 import com.todo_backend.service.TheListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
@@ -25,13 +27,18 @@ public class TaskController {
     }
 
     @GetMapping("")
-    private List<Task> getAllTasks(@RequestParam(value = "type", required = false) String type){
+    private List<Task> getAllTasks(@RequestParam(value = "type", required = false) String type, Authentication authentication){
+        if (authentication == null){
+            throw new CustomException("Please logged in to get all the tasks", HttpStatus.UNAUTHORIZED);
+        }
+        User user = (User) authentication.getPrincipal();
+        long userId = user.getId();
         if (Objects.equals(type, "today")){
-            return taskService.findTodayTasks();
+            return taskService.findTodayTasks(userId);
         }else if(Objects.equals(type, "upcoming")){
-            return taskService.findUpcomingTasks();
+            return taskService.findUpcomingTasks(userId);
         }else{
-            return taskService.findAll();
+            return taskService.findAll(userId);
         }
     }
     @PostMapping("/{listId}")

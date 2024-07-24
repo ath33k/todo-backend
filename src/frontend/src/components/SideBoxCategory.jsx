@@ -7,14 +7,16 @@ import axios from "axios";
 import { useTasksData } from "../context/TasksProvider";
 
 const SideBoxCategory = ({ selectedTab, setSelectedTab }) => {
-  const { data, setData } = useTasksData();
+  const { data, setData, setIsLoading } = useTasksData();
 
   const fetchAllTasks = async (val) => {
     try {
       const response = await axios.get(`/api/tasks?type=${val}`);
+      setIsLoading(false);
       return response.data;
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
 

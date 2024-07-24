@@ -8,6 +8,7 @@ const CreateTask = ({ open, setOpen, listId, setData }) => {
   const [dateTime, setDateTime] = useState(
     new Date(Date.now()).toISOString().slice(0, 16)
   );
+
   const handleClose = () => setOpen(false);
 
   const handleSubmit = async (e) => {

@@ -6,10 +6,9 @@ import com.todo_backend.exception.CustomException;
 import java.util.List;
 
 public interface TaskService {
-    List<Task> findAll();
-    List<Task> findTodayTasks();
-    List<Task> findUpcomingTasks();
-
+    List<Task> findAll(long userId);
+    List<Task> findTodayTasks(long userId);
+    List<Task> findUpcomingTasks(long userId);
 
 
     Task findById(int theId) throws CustomException;

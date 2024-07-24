@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal, Tooltip, Typography } from "@mui/material";
 import axios from "axios";
 import TheList from "./TheList";
 import CreateList from "./CreateList";
@@ -61,9 +61,11 @@ const SideBoxList = ({ selectedTab, setSelectedTab }) => {
         )}
 
         <div
-          className={`flex items-center gap-2 px-2 p-1  hover:bg-neutral-300 text-blue-600 cursor-pointer ${
+          className={`flex items-center gap-2 px-2 p-1  hover:bg-neutral-300  text-blue-600 cursor-pointer hover:animate-none hover:text-blue-600 ${
             isOverflow ? "hidden" : ""
-          }`}
+          } ${
+            lists.length == 0 ? "animate-pulse bg-gray-400 text-white" : ""
+          } `}
           onClick={() => setModelOpen(true)}
         >
           <span>

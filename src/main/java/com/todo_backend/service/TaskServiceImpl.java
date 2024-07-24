@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,19 +28,20 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public List<Task> findAll() {
-        Sort sort = Sort.by("isCompleted").ascending();
-        return taskRepository.findAll(sort);
+    public List<Task> findAll(long userId) {
+//        Sort sort = Sort.by("isCompleted").ascending();
+//        return taskRepository.findAll(sort);
+        return taskRepository.getAllTasks(userId);
     }
 
     @Override
-    public List<Task> findTodayTasks() {
-        return taskRepository.selectTodayTasks();
+    public List<Task> findTodayTasks(long userId) {
+        return taskRepository.selectTodayTasks(userId);
     }
 
     @Override
-    public List<Task> findUpcomingTasks() {
-        return taskRepository.selectUpcomingTasks();
+    public List<Task> findUpcomingTasks(long userId) {
+        return taskRepository.selectUpcomingTasks(userId);
     }
 
     @Override
@@ -57,18 +59,37 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
+    @Transactional
     public Task update(int theId, Task task) throws CustomException {
-        Optional<Task> result = taskRepository.findById(theId);
-        Task theTask = null;
+        Task result = taskRepository.findById(theId)
+                .orElseThrow(()-> new CustomException("task with " + theId +
+                        "does not exist", HttpStatus.NOT_FOUND));
 
-        if (result.isPresent()){
-            theTask = result.get();
-        }else{
-            throw new CustomException("The task you looking for hasn't found", HttpStatus.NOT_FOUND);
+        var name = task.getName();
+        var description = task.getDescription();
+        var isCompleted = task.getIsCompleted();
+        var dateTime =task.getDateTime();
+
+        if (name != null &&
+                name.length() > 0 &&
+                !Objects.equals(result.getName(), name)){
+            result.setName(name);
         }
-        theTask.setCompleted(task.getIsCompleted());
 
-        return taskRepository.save(theTask);
+        if (description != null &&
+                description.length() > 0 &&
+                !Objects.equals(result.getDescription(), description)){
+            result.setName(description);
+        }
+        if (result.getIsCompleted() != isCompleted){
+            result.setName(description);
+        }
+        if (dateTime != null &&
+                !Objects.equals(result.getDateTime(), dateTime)){
+            result.setName(description);
+        }
+
+        return taskRepository.save(result);
     }
 
     @Override

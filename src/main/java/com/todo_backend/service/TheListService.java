@@ -13,7 +13,7 @@ public interface TheListService {
     List<TheList> findAllByUser(User newUser);
 
     TheList findById(int theId) throws CustomException;
-    TheList update(int theId);
+    TheList update(int theId, TheList theList);
 
     TheList save(TheList theList, User newUser);
 

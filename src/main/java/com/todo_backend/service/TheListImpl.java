@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -50,14 +52,29 @@ public class TheListImpl implements TheListService{
     }
 
     @Override
-    public TheList update(int theId) {
-        return null;
+    @Transactional
+    public TheList update(int theId, TheList theList) {
+        TheList result = listRepository.findById(theId)
+                .orElseThrow(()-> new CustomException("list with " + theId +
+                        "does not exist", HttpStatus.NOT_FOUND));
+
+        var name = theList.getName();
+        if (name != null &&
+                name.length() > 0 &&
+                !Objects.equals(result.getName(),name)){
+            result.setName(name);
+        }
+        return listRepository.save(result);
     }
 
     @Override
     public TheList save(TheList theList, User newUser) {
+        TheList checkList = listRepository.findTheListByName(theList.getName());
+        if (checkList != null){
+            throw new CustomException(theList.getName() +" already exist", HttpStatus.BAD_REQUEST);
+        }
         theList.setUser(newUser);
-        return listRepository.save(theList);
+            return listRepository.save(theList);
     }
 
 

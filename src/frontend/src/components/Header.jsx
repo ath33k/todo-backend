@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuthUser } from "../context/AuthProvider";
 import { Button } from "@mui/material";
+import ToDoLogo from "./../assets/todoLogo.svg";
 import axios from "axios";
 
 const Header = () => {
@@ -17,9 +18,8 @@ const Header = () => {
 
   return (
     <div className="flex justify-between p-2 bg-black text-white">
-      <div className="flex gap-2">
-        <div>Logo</div>
-        <h2>Todo</h2>
+      <div className="flex gap-2 items-center">
+        <img src={ToDoLogo} alt="" className="w-[36px] h-[36px]" />
       </div>
       {isAuthenticated && (
         <div className="flex gap-4">
